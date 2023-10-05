@@ -1,0 +1,762 @@
+import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
+
+
+void main() => runApp(NEWAPP());
+
+
+class NEWAPP extends StatelessWidget {
+  const NEWAPP({Key? key}) : super(key: key);
+ @override
+  Widget build(BuildContext context) {
+    return MaterialApp(home: page1()
+    );
+    }
+}
+class classe extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Classe',
+        style: TextStyle(
+              fontSize: 30.0,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 3.0
+            ),
+          ),
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(255, 40, 94, 138),
+      ),
+      body: Column(
+          children: [
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {},
+              
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child: Align(
+    alignment: Alignment.centerLeft,
+                child: Text('IE3', style:TextStyle(
+                  fontSize: 20.0,fontWeight: FontWeight.bold, letterSpacing: 2.0,
+                  color:Colors.white  ) ,
+                ),
+                  ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {Navigator.push(context,
+      MaterialPageRoute(builder: (context) => IE4()),
+    );
+    },
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child: Align(
+    alignment: Alignment.centerLeft,
+                child: Text('IE4', style:TextStyle(
+                  fontSize: 20.0,fontWeight: FontWeight.bold, letterSpacing: 2.0,
+                  color:Colors.white  )),
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child: Align(
+    alignment: Alignment.centerLeft,
+                child: Text('IE5', style:TextStyle(
+                  fontSize: 20.0,fontWeight: FontWeight.bold, letterSpacing: 2.0,
+                  color:Colors.white  )
+                ),
+                  ),
+              ),
+            ),
+          ],
+        ),
+    );
+  }
+}
+class IE4 extends StatefulWidget {
+  @override
+  _IE4State createState() => _IE4State();
+}
+
+class _IE4State extends State<IE4> {
+  final dbHelper = DatabaseHelper();
+  List<Map<String, dynamic>> students = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadStudents();
+  }
+
+  Future<void> _loadStudents() async {
+    final loadedStudents = await dbHelper.getStudents();
+    setState(() {
+      students = loadedStudents;
+    });
+  }
+
+  Future<void> _addStudent(String name) async {
+    await dbHelper.insertStudent(name);
+    _loadStudents();
+  }
+
+  Future<void> _deleteStudent(int id) async {
+    await dbHelper.deleteStudent(id);
+    _loadStudents();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'ETUDIANTS',
+          style: TextStyle(
+            fontSize: 30.0,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 3.0,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Color.fromARGB(255, 40, 94, 138),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              children: students.map((student) {
+                final id = student['id'];
+                final name = student['name'];
+
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 20, 73, 117),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  child: ListTile(
+                    title: Text(
+                      name,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        _deleteStudent(id);
+                      },
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  final nameController = TextEditingController();
+
+                  return AlertDialog(
+                    title: Text('Add Student'),
+                    content: TextField(
+                      controller: nameController,
+                      decoration: InputDecoration(
+                        labelText: 'Name',
+                      ),
+                    ),
+                    actions: [
+                      ElevatedButton(
+                        onPressed: () {
+                          final name = nameController.text;
+                          _addStudent(name);
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Add'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            child: Text('Add Student'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class electronique extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Diplome',
+        style: TextStyle(
+              fontSize: 30.0,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 3.0
+            ),
+          ),
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(255, 40, 94, 138),
+      ),
+      body: Column(
+          children: [
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {},
+              
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child: Align(
+    alignment: Alignment.centerLeft,
+                child: Text('Liscence', style:TextStyle(
+                  fontSize: 20.0,fontWeight: FontWeight.bold, letterSpacing: 2.0,
+                  color:Colors.white  ) ,
+                ),
+                  ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context,
+      MaterialPageRoute(builder: (context) => classe()),
+    );
+                },
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child: Align(
+    alignment: Alignment.centerLeft,
+                child: Text('Cycle_d ing', style:TextStyle(
+                  fontSize: 20.0,fontWeight: FontWeight.bold, letterSpacing: 2.0,
+                  color:Colors.white  )),
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child: Align(
+    alignment: Alignment.centerLeft,
+                child: Text('Mastére', style:TextStyle(
+                  fontSize: 20.0,fontWeight: FontWeight.bold, letterSpacing: 2.0,
+                  color:Colors.white  )
+                ),
+                  ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child: Align(
+    alignment: Alignment.centerLeft,
+                child: Text('Recherche', style:TextStyle(
+                  fontSize: 20.0,fontWeight: FontWeight.bold, letterSpacing: 2.0,
+                  color:Colors.white  )
+                ),
+                  ),
+              ),
+            ),
+          ],
+        ),
+    );
+  }
+}
+
+class section extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Section',
+        style: TextStyle(
+              fontSize: 30.0,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 3.0
+            ),
+          ),
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(255, 40, 94, 138),
+      ),
+      body: Column(
+          children: [
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {},
+              
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child: Align(
+    alignment: Alignment.centerLeft,
+                child: Text('PHYSIQUE', style:TextStyle(
+                  fontSize: 20.0,fontWeight: FontWeight.bold, letterSpacing: 2.0,
+                  color:Colors.white  ) ,
+                ),
+                  ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child: Align(
+    alignment: Alignment.centerLeft,
+                child: Text('ENERGITIQUE', style:TextStyle(
+                  fontSize: 20.0,fontWeight: FontWeight.bold, letterSpacing: 2.0,
+                  color:Colors.white  )),
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context,
+      MaterialPageRoute(builder: (context) => electronique()),
+    );
+                },
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child: Align(
+    alignment: Alignment.centerLeft,
+                child: Text('ELECTRONIQUE', style:TextStyle(
+                  fontSize: 20.0,fontWeight: FontWeight.bold, letterSpacing: 2.0,
+                  color:Colors.white  )
+                ),
+                  ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child: Align(
+    alignment: Alignment.centerLeft,
+                child: Text('PHYSIQUE_ENERGITIQUE', style:TextStyle(
+                  fontSize: 20.0,fontWeight: FontWeight.bold, letterSpacing: 2.0,
+                  color:Colors.white  )
+                ),
+                  ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child: Align(
+    alignment: Alignment.centerLeft,
+                child: Text('PHYSIQUE_CHIMIE', style:TextStyle(
+                  fontSize: 20.0,fontWeight: FontWeight.bold, letterSpacing: 2.0,
+                  color:Colors.white  )
+                ),
+                  ),
+              ),
+            ),
+          ],
+        ),
+    );
+  }
+}
+
+class page1 extends StatelessWidget  {
+  const page1({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context){
+
+  return
+       Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Welcome!',
+            style: TextStyle(
+              fontSize: 30.0,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 3.0
+            ),
+          ),
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(255, 40, 94, 138),
+        ),
+        body: Center(
+          child: Column( 
+            mainAxisAlignment:MainAxisAlignment.center,
+            children:<Widget>[
+               Text(
+                'Educonnect',
+                style: TextStyle(fontSize: 40.0,fontWeight:FontWeight.w600,letterSpacing: 2.0 
+                ),
+              ),
+              Image(
+                image: AssetImage('images/educationlogo.png'), // Affichage de l'image
+              ),
+              SizedBox(height: 20), // Espacement entre l'image et le texte
+              
+            ],
+          ),
+        ),
+          floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(context,
+      MaterialPageRoute(builder: (context) => NewPage()),
+    );
+          },
+          child: Icon(Icons.arrow_forward),
+        ),    
+        );
+  }
+    
+
+  }
+
+class NewPage extends StatelessWidget {
+  const NewPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Faculties',
+         style: TextStyle(
+              fontSize: 30.0,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 3.0
+            ),),
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(255, 40, 94, 138),
+      ),
+      body: Column(
+          children: [
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {
+                   Navigator.push(context,
+      MaterialPageRoute(builder: (context) => Departments()),
+              );
+              },
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'FST',
+          style: TextStyle(
+            fontSize: 29.0,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2.0,
+            color: Colors.white,
+          ),
+        ),
+        Image.asset(
+          'images/fst.png',
+          height: 30,
+          width: 30,
+        ),
+      ],
+                
+          
+        ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child:  Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'ENIT',
+          style: TextStyle(
+            fontSize: 29.0,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2.0,
+            color: Colors.white,
+          ),
+        ),
+        Image.asset(
+          'images/enit.jpg',
+          height: 30,
+          width: 30,
+        ),
+      ],    
+        ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+               child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'FSEG',
+          style: TextStyle(
+            fontSize: 29.0,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2.0,
+            color: Colors.white,
+          ),
+        ),
+        Image.asset(
+          'images/fsegt.png',
+          height: 30,
+          width: 30,
+        ),
+      ],
+                
+          
+        ),
+              ),
+            ),
+          ], 
+      ),       
+      );
+    
+  }
+}
+class Departments extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Departments',
+        style: TextStyle(
+              fontSize: 30.0,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 3.0
+            ),
+          ),
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(255, 40, 94, 138),
+      ),
+      body: Column(
+          children: [
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {
+                   Navigator.push(context,
+      MaterialPageRoute(builder: (context) => section()),
+              );
+              },
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child: Align(
+    alignment: Alignment.centerLeft,
+                child: Text('PHYSIQUE', style:TextStyle(
+                  fontSize: 20.0,fontWeight: FontWeight.bold, letterSpacing: 2.0,
+                  color:Colors.white  ) ,
+                ),
+                  ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child: Align(
+    alignment: Alignment.centerLeft,
+                child: Text('MATHEMATIQUE', style:TextStyle(
+                  fontSize: 20.0,fontWeight: FontWeight.bold, letterSpacing: 2.0,
+                  color:Colors.white  )),
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child: Align(
+    alignment: Alignment.centerLeft,
+                child: Text('INFORMATIQUE', style:TextStyle(
+                  fontSize: 20.0,fontWeight: FontWeight.bold, letterSpacing: 2.0,
+                  color:Colors.white  )
+                ),
+                  ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child: Align(
+    alignment: Alignment.centerLeft,
+                child: Text('CHIMIE', style:TextStyle(
+                  fontSize: 20.0,fontWeight: FontWeight.bold, letterSpacing: 2.0,
+                  color:Colors.white  )
+                ),
+                  ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+    primary: Color.fromARGB(255, 25, 107, 175)
+                ),
+                child: Align(
+    alignment: Alignment.centerLeft,
+                child: Text('GEOLOGIE', style:TextStyle(
+                  fontSize: 20.0,fontWeight: FontWeight.bold, letterSpacing: 2.0,
+                  color:Colors.white  )
+                ),
+                  ),
+              ),
+            ),
+          ],
+        ),
+    );
+  }
+}
+
+class DatabaseHelper {
+  static Database? _database;
+
+  Future<Database> get database async {
+    if (_database != null) {
+      return _database!;
+    }
+
+    // Si la base de données n'est pas encore ouverte, l'ouvrir et la créer si nécessaire.
+    _database = await openDatabase( 'database.db',
+      onCreate: (db, version) {
+        // Créer la table des étudiants.
+        return db.execute(
+          'CREATE TABLE students(id INTEGER PRIMARY KEY, name TEXT)',
+        );
+      },
+      version: 1,
+    );
+
+    return _database!;
+  
+}
+Future<void> insertStudent(String name) async {
+    final db = await database;
+    await db.insert(
+      'students',
+      {'name': name},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getStudents() async {
+    final db = await database;
+    return db.query('students');
+  }
+
+  Future<void> deleteStudent(int id) async {
+    final db = await database;
+    await db.delete(
+      'students',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+}
